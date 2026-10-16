@@ -273,6 +273,7 @@ function createMainWindow(config) {
   });
 
   mainWindow.setMenuBarVisibility(false);
+  mainWindow.maximize();
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (/^https?:\/\//i.test(url)) {
@@ -302,7 +303,7 @@ function createMainWindow(config) {
   if (isDev) {
     mainWindow.loadURL("http://localhost:5173");
   } else {
-    mainWindow.loadURL(`${APP_SCHEME}://${APP_HOST}/index.html`);
+    mainWindow.loadURL(`${APP_SCHEME}://${APP_HOST}/`);
   }
 }
 
