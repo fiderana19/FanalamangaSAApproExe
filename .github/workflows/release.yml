@@ -40,7 +40,19 @@ jobs:
       - name: Generate application icon
         run: npm run icon
 
-      - name: Build and publish installer
-        run: npx electron-builder --win nsis --publish always
+      - name: Build installer
+        run: npx electron-builder --win nsis --publish never
+
+      - name: List release artifacts
+        shell: bash
+        run: ls -la release
+
+      - name: Publish release
+        shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            release/*.exe release/*.yml release/*.blockmap \
+            --title "Fanalamanga SA Approvisionnement ${GITHUB_REF_NAME#v}" \
+            --notes "Version ${GITHUB_REF_NAME#v}"
