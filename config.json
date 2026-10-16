@@ -2,5 +2,11 @@
   "baseUrl": "http://localhost:3002/api",
   "stockUrl": "http://localhost:3066/api",
   "stockApiKey": "fsa-stock-2026-9k2m7q",
-  "wsUrl": ""
+  "wsUrl": "",
+  "update": {
+    "enabled": true,
+    "autoCheckOnStartup": true,
+    "owner": "fiderana19",
+    "repo": "FanalamangaSAApproExe"
+  }
 }

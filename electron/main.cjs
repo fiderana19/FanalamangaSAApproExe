@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, net, protocol, session, shell } = require("electron");
 const fs = require("fs");
 const path = require("path");
+const updater = require("./updater.cjs");
 
 const APP_SCHEME = "app";
 const APP_HOST = "app";
@@ -11,6 +12,12 @@ const DEFAULT_CONFIG = {
   stockUrl: "http://localhost:3066/api",
   stockApiKey: "",
   wsUrl: "",
+  update: {
+    enabled: true,
+    autoCheckOnStartup: true,
+    owner: "fiderana19",
+    repo: "FanalamangaSAApproExe",
+  },
 };
 
 const MIME_TYPES = {
@@ -36,6 +43,7 @@ let splashWindow = null;
 let mainWindow = null;
 let backendOk = false;
 let mainWindowReady = false;
+let startupUpdateChecked = false;
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -143,6 +151,28 @@ function sendSplashStatus(status) {
   if (splashWindow && !splashWindow.isDestroyed()) {
     splashWindow.webContents.send("splash-status", status);
   }
+}
+
+function sendUpdateEvent(payload) {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send("updater:event", payload);
+  }
+}
+
+function scheduleStartupUpdateCheck(config) {
+  if (startupUpdateChecked) return;
+  startupUpdateChecked = true;
+
+  const updateConfig = (config && config.update) || {};
+  if (updateConfig.enabled === false || updateConfig.autoCheckOnStartup === false) {
+    return;
+  }
+
+  setTimeout(() => {
+    updater.checkForUpdates().catch((error) => {
+      console.error("[updater] Verification initiale echouee:", error && error.message);
+    });
+  }, 4000);
 }
 
 async function checkBackend(config) {
@@ -262,6 +292,7 @@ function createMainWindow(config) {
   mainWindow.webContents.on("did-finish-load", () => {
     mainWindowReady = true;
     maybeShowMainWindow();
+    scheduleStartupUpdateCheck(config);
   });
 
   mainWindow.on("closed", () => {
@@ -293,6 +324,13 @@ app.whenReady().then(() => {
   ipcMain.on("splash-retry", () => {
     runBackendCheck(config, { manual: true });
   });
+
+  ipcMain.handle("app:version", () => app.getVersion());
+  ipcMain.handle("updater:check", () => updater.checkForUpdates());
+  ipcMain.handle("updater:download", () => updater.downloadUpdate());
+  ipcMain.handle("updater:install", () => updater.installUpdate());
+
+  updater.setupUpdater({ config, isDev, sendEvent: sendUpdateEvent });
 
   createSplashWindow();
   createMainWindow(config);

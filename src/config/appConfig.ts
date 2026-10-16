@@ -5,12 +5,30 @@ export interface AppConfigInterface {
     wsUrl?: string;
 }
 
+export interface UpdateEventInterface {
+    state: string;
+    version?: string;
+    releaseName?: string;
+    releaseNotes?: string;
+    releaseDate?: string;
+    percent?: number;
+    transferred?: number;
+    total?: number;
+    bytesPerSecond?: number;
+    message?: string;
+}
+
 declare global {
     interface Window {
         appConfig?: AppConfigInterface;
         electronAPI?: {
             retryBackend: () => void;
             onSplashStatus: (callback: (status: { state: string; message?: string; manual?: boolean }) => void) => () => void;
+            getAppVersion: () => Promise<string>;
+            checkForUpdates: () => Promise<unknown>;
+            downloadUpdate: () => Promise<unknown>;
+            installUpdate: () => Promise<unknown>;
+            onUpdateEvent: (callback: (event: UpdateEventInterface) => void) => () => void;
         };
     }
 }

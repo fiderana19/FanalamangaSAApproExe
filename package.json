@@ -1,7 +1,7 @@
 {
   "name": "fanalamanga_procurement_ui",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -37,6 +37,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
+    "electron-updater": "^6.8.9",
     "html5-qrcode": "^2.3.8",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.494.0",
@@ -98,6 +99,14 @@
       {
         "from": "config.json",
         "to": "config.json"
+      }
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "fiderana19",
+        "repo": "FanalamangaSAApproExe",
+        "releaseType": "release"
       }
     ],
     "win": {

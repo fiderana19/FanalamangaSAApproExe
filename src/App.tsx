@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
+import UpdateManager from "@/components/common/UpdateManager";
 
 const LoginPage = lazy(() => import("@/pages/Auth/LoginPage"));
 const ForgotPasswordPage = lazy(() => import("@/pages/Auth/ForgotPasswordPage"));
@@ -110,6 +111,8 @@ function App() {
   const fallback = <div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>;
 
   return (
+      <>
+      <UpdateManager />
       <Routes>
         {/* Public routes */}
         <Route index path="/" element={
@@ -493,6 +496,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
+      </>
   )
 }
 
