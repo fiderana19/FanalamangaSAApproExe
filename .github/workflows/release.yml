@@ -53,6 +53,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "${GITHUB_REF_NAME}" \
-            release/*.exe release/*.yml release/*.blockmap \
+            release/*.exe release/latest.yml release/*.blockmap \
             --title "Fanalamanga SA Approvisionnement ${GITHUB_REF_NAME#v}" \
             --notes "Version ${GITHUB_REF_NAME#v}"

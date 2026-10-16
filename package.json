@@ -122,7 +122,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Fanalamanga SA Approvisionnement",
-      "artifactName": "${productName} Setup ${version}.exe",
+      "artifactName": "Fanalamanga-SA-Approvisionnement-Setup-${version}.exe",
       "deleteAppDataOnUninstall": false
     }
   }
