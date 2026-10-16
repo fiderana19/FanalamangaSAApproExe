@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Fanalamanga SA Approvisionnement</title>
+    <style>
+      :root {
+        --brand: #1f7a4d;
+        --brand-2: #2d9864;
+        --brand-bg: #f5f7f8;
+        --brand-border: #e5e7eb;
+        --brand-muted: #6b7280;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        padding: 28px 32px;
+        background: var(--brand-bg);
+        border: 1px solid var(--brand-border);
+        border-radius: 14px;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: #111827;
+        text-align: center;
+        -webkit-app-region: drag;
+        overflow: hidden;
+      }
+
+      .logo {
+        width: 84px;
+        height: 84px;
+        object-fit: contain;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--brand);
+      }
+
+      .subtitle {
+        margin: -10px 0 0;
+        font-size: 12px;
+        color: var(--brand-muted);
+      }
+
+      .spinner {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 3px solid rgba(31, 122, 77, 0.18);
+        border-top-color: var(--brand-2);
+        animation: spin 0.9s linear infinite;
+      }
+
+      .spinner.hidden {
+        display: none;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .status {
+        margin: 0;
+        min-height: 16px;
+        font-size: 12px;
+        color: var(--brand-muted);
+        max-width: 420px;
+      }
+
+      .status.error {
+        color: #b91c1c;
+      }
+
+      .actions {
+        display: none;
+        -webkit-app-region: no-drag;
+      }
+
+      .actions.visible {
+        display: block;
+      }
+
+      button {
+        -webkit-app-region: no-drag;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #ffffff;
+        background: var(--brand);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+
+      button:hover {
+        background: var(--brand-2);
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+
+      .version {
+        position: fixed;
+        bottom: 8px;
+        right: 12px;
+        font-size: 10px;
+        color: #9ca3af;
+      }
+    </style>
+  </head>
+  <body>
+    <img class="logo" src="./splash-logo.png" alt="Fanalamanga SA" />
+    <h1>FANALAMANGA S.A</h1>
+    <p class="subtitle">Application d'Approvisionnement</p>
+
+    <div class="spinner" id="spinner"></div>
+
+    <p class="status" id="status">Preparation de l'application...</p>
+
+    <div class="actions" id="actions">
+      <button id="retry" type="button">Reessayer</button>
+    </div>
+
+    <span class="version" id="version"></span>
+
+    <script>
+      const spinner = document.getElementById("spinner");
+      const status = document.getElementById("status");
+      const actions = document.getElementById("actions");
+      const retry = document.getElementById("retry");
+
+      retry.addEventListener("click", () => {
+        retry.disabled = true;
+        retry.textContent = "Verification...";
+        window.electronAPI?.retryBackend();
+      });
+
+      window.electronAPI?.onSplashStatus((payload) => {
+        if (!payload) return;
+
+        if (payload.state === "checking") {
+          spinner.classList.remove("hidden");
+          actions.classList.remove("visible");
+          status.classList.remove("error");
+          status.textContent = "Connexion au serveur...";
+          retry.disabled = false;
+          retry.textContent = "Reessayer";
+          return;
+        }
+
+        if (payload.state === "ok") {
+          spinner.classList.remove("hidden");
+          actions.classList.remove("visible");
+          status.classList.remove("error");
+          status.textContent = "Chargement de l'interface...";
+          return;
+        }
+
+        if (payload.state === "error") {
+          spinner.classList.add("hidden");
+          actions.classList.add("visible");
+          status.classList.add("error");
+          status.textContent = payload.message || "Serveur indisponible.";
+          retry.disabled = false;
+          retry.textContent = "Reessayer";
+        }
+      });
+    </script>
+  </body>
+</html>
