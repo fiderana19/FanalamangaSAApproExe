@@ -10,7 +10,7 @@ const StockDispoBadge: React.FC<StockDispoBadgeProps> = ({ quantite }) => {
   }
   return (
     <span className='text-sm text-gray-700'>
-      {quantite} {quantite === 1 ? "disponible" : "disponibles"}
+      {quantite} disponible(s)
     </span>
   );
 };

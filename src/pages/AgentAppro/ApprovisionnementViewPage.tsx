@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
-import { ClipboardCheck, ShoppingCart } from "lucide-react";
+import { ClipboardCheck, ShoppingCart, XCircle } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PageActionBar from "@/components/ui/PageActionBar";
 import ApprovisionnementStatutBadge from "@/components/status/ApprovisionnementStatutBadge";
 import UrgentBadge from "@/components/common/UrgentBadge";
 import HistoriqueAppro from "@/components/approvisionnement/HistoriqueAppro";
+import AnnulerApprovisionnementDialog from "@/components/approvisionnement/AnnulerApprovisionnementDialog";
 import RessourceCategorieBadge from "@/components/ressources/RessourceCategorieBadge";
 import { getUniteLabel } from "@/constants/RessourceUnite";
 import { getDirectionLabel } from "@/constants/Direction";
@@ -40,6 +41,11 @@ const ApprovisionnementViewPage: React.FC = () => {
   const peutVerifierStock =
     statutsSortie.includes(approvisionnement?.statutApprovisionnement ?? "") &&
     !!bonMagasinId;
+
+  const peutAnnuler =
+    approvisionnement?.statutApprovisionnement === "en_cours" && !!id;
+
+  const [annulerDialogOpen, setAnnulerDialogOpen] = useState(false);
 
   const ouvrirVerificationStock = () => {
     if (id) {
@@ -80,19 +86,39 @@ const ApprovisionnementViewPage: React.FC = () => {
             </div>
           </div>
 
-          {peutVerifierStock && (
+          {(peutVerifierStock || peutAnnuler) && (
             <PageActionBar>
-              <Button
-                type='button'
-                variant='brand'
-                onClick={ouvrirVerificationStock}
-                className='shrink-0 shadow-md'
-              >
-                <ClipboardCheck />
-                Disponibilité des ressources
-              </Button>
+              {peutAnnuler && (
+                <Button
+                  type='button'
+                  variant='destructive'
+                  onClick={() => setAnnulerDialogOpen(true)}
+                  className='shrink-0 shadow-md'
+                >
+                  <XCircle />
+                  Annuler l'approvisionnement
+                </Button>
+              )}
+              {peutVerifierStock && (
+                <Button
+                  type='button'
+                  variant='brand'
+                  onClick={ouvrirVerificationStock}
+                  className='shrink-0 shadow-md'
+                >
+                  <ClipboardCheck />
+                  Disponibilité des ressources
+                </Button>
+              )}
             </PageActionBar>
           )}
+
+          <AnnulerApprovisionnementDialog
+            open={annulerDialogOpen}
+            onOpenChange={setAnnulerDialogOpen}
+            approvisionnementId={approvisionnement._id}
+            numeroApprovisionnement={approvisionnement.numeroApprovisionnement}
+          />
 
           <div className='mt-5 grid grid-cols-1 gap-5 items-start pb-14 lg:grid-cols-[minmax(0,1fr)_320px]'>
             <div className='flex flex-col gap-5'>

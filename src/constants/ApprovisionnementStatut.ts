@@ -6,6 +6,7 @@ import {
   ShoppingBag,
   Split,
   Truck,
+  XCircle,
   type LucideIcon,
 } from "lucide-react";
 
@@ -24,6 +25,7 @@ export const APPROVISIONNEMENT_STATUT_LABELS: Record<string, string> = {
   en_livraison_achat_recu: "En livraison - achat reçu",
   partiellement_recu_en_cours_achat: "Partiellement reçu - en cours d'achat",
   partiellement_recu_achat_recu: "Partiellement reçu - achat reçu",
+  annule: "Annulé",
 }
 
 export const APPROVISIONNEMENT_STATUTS = Object.keys(APPROVISIONNEMENT_STATUT_LABELS)
@@ -70,6 +72,7 @@ export const APPROVISIONNEMENT_STATUT_META: Record<string, ApprovisionnementStat
   en_livraison_achat_recu: { icon: Truck, badge: "bg-amber-50 text-amber-700", dot: "bg-amber-500" },
   partiellement_recu_en_cours_achat: { icon: Split, badge: "bg-orange-50 text-orange-700", dot: "bg-orange-500" },
   partiellement_recu_achat_recu: { icon: PackageCheck, badge: "bg-amber-50 text-amber-700", dot: "bg-amber-500" },
+  annule: { icon: XCircle, badge: "bg-red-50 text-red-600", dot: "bg-red-500" },
 }
 
 export const getApprovisionnementStatutMeta = (statut?: string): ApprovisionnementStatutMeta =>

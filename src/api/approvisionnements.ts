@@ -1,5 +1,8 @@
 import axiosAuthInstance from "./Config";
-import { ManageApprovisionnementInterface } from "@/interfaces/Approvisionnement";
+import {
+  AnnulerApprovisionnementInterface,
+  ManageApprovisionnementInterface,
+} from "@/interfaces/Approvisionnement";
 import { BASE_URL } from "@/config/appConfig";
 
 const ApprovisionnementAPIUrl = `${BASE_URL}/approvisionnement`;
@@ -26,6 +29,16 @@ export const getApprovisionnementParBon = async (bonMagasinId: string) => {
 
 export const getApprovisionnement = async (id: string) => {
   return await axiosAuthInstance.get(`${ApprovisionnementAPIUrl}/${id}`);
+}
+
+export const annulerApprovisionnement = async (
+  id: string,
+  data: AnnulerApprovisionnementInterface,
+) => {
+  return await axiosAuthInstance.patch(
+    `${ApprovisionnementAPIUrl}/${id}/annuler`,
+    data,
+  );
 }
 
 export const getTraitementsAppro = async (id: string) => {

@@ -12,7 +12,8 @@ export type ApprovisionnementStatutType =
   | "en_livraison_en_cours_achat"
   | "en_livraison_achat_recu"
   | "partiellement_recu_en_cours_achat"
-  | "partiellement_recu_achat_recu";
+  | "partiellement_recu_achat_recu"
+  | "annule";
 
 export interface ApprovisionnementDemandeRef {
   _id: string;
@@ -59,6 +60,10 @@ export interface ApprovisionnementInterface {
 export interface ManageApprovisionnementInterface {
   bonMagasinId: string;
   commentaireApprovisionnement?: string;
+}
+
+export interface AnnulerApprovisionnementInterface {
+  commentaireAnnulation?: string;
 }
 
 export interface TraitementApproInterface {
