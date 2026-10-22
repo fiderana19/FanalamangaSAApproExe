@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import ConfirmDialog from "@/components/ui/confirm-dialog";
 import PageActionBar from "@/components/ui/PageActionBar";
 import DemandeAchatStatutBadge from "@/components/status/DemandeAchatStatutBadge";
-import BonMagasinPdfPreview from "@/components/bonmagasin/BonMagasinPdfPreview";
 import HistoriqueAchat from "@/components/demandeachat/HistoriqueAchat";
 import { downloadBlob, generateDemandeAchatBlob } from "@/utils/DemandeAchatPdf";
+import { sanitizeFileName } from "@/utils/FileName";
+import { showToast } from "@/utils/Toast";
+import { TOAST_TYPE } from "@/constants/ToastType";
 import { useGetDemandeAchat } from "@/hooks/useGetDemandeAchat";
 import { useChangerStatutDemandeAchat } from "@/hooks/useChangerStatutDemandeAchat";
 import { useAddStock } from "@/hooks/useAddStock";
@@ -24,9 +26,6 @@ const DemandeAchatViewPage: React.FC = () => {
   const addStock = useAddStock();
   const [terminerDialogOpen, setTerminerDialogOpen] = useState(false);
   const [pdfGenerating, setPdfGenerating] = useState(false);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
 
   const appro = demandeAchat?.approvisionnement ?? null;
   const demandeur = appro?.bonMagasin?.demande?.demandeur ?? null;
@@ -76,33 +75,17 @@ const DemandeAchatViewPage: React.FC = () => {
     setPdfGenerating(true);
     try {
       const blob = await generateDemandeAchatBlob(value);
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-      const url = URL.createObjectURL(blob);
-      setPreviewBlob(blob);
-      setPreviewUrl(url);
-      setPreviewOpen(true);
+      downloadBlob(
+        blob,
+        `${sanitizeFileName(value.numeroDemandeAchat ?? "demande-achat")}.pdf`,
+      );
+    } catch {
+      showToast({
+        type: TOAST_TYPE.ERROR,
+        message: "Impossible de générer le PDF. Veuillez réessayer.",
+      });
     } finally {
       setPdfGenerating(false);
-    }
-  };
-
-  const handlePreviewChange = (open: boolean) => {
-    setPreviewOpen(open);
-    if (!open && previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      setPreviewUrl(null);
-      setPreviewBlob(null);
-    }
-  };
-
-  const handleDownload = () => {
-    if (previewBlob) {
-      downloadBlob(
-        previewBlob,
-        `${demandeAchat?.numeroDemandeAchat ?? "demande-achat"}.pdf`,
-      );
     }
   };
 
@@ -286,15 +269,6 @@ const DemandeAchatViewPage: React.FC = () => {
 
         <HistoriqueAchat demandeAchatId={demandeAchat._id} />
       </div>
-
-      <BonMagasinPdfPreview
-        open={previewOpen}
-        onOpenChange={handlePreviewChange}
-        url={previewUrl}
-        fileName={`${demandeAchat.numeroDemandeAchat}.pdf`}
-        onDownload={handleDownload}
-        title="Aperçu de la demande d'achat"
-      />
 
       <ConfirmDialog
         open={terminerDialogOpen}

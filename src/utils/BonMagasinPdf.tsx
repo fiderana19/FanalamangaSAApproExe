@@ -5,37 +5,21 @@ import { BonMagasinInterface } from "@/interfaces/BonMagasin";
 import { BonSortieInterface } from "@/interfaces/BonSortie";
 import { genererQrDataUrl } from "@/utils/QrCode";
 
-let pdfInstance: ReturnType<typeof pdf> | null = null;
-
-const getPdfInstance = () => {
-  if (!pdfInstance) {
-    pdfInstance = pdf();
-  }
-  return pdfInstance;
-};
-
 export const generateBonMagasinBlob = async (bon: BonMagasinInterface) => {
-  const instance = getPdfInstance();
-  await new Promise<void>((resolve) => {
-    instance.updateContainer(<BonMagasinPdf bon={bon} />, () => resolve());
-  });
+  const instance = pdf(<BonMagasinPdf bon={bon} />);
   return instance.toBlob();
 };
 
 export const generateBonSortieBlob = async (bon: BonSortieInterface) => {
-  const instance = getPdfInstance();
   let qrCodeDataUrl: string | undefined;
   try {
     qrCodeDataUrl = await genererQrDataUrl(bon._id);
   } catch {
     qrCodeDataUrl = undefined;
   }
-  await new Promise<void>((resolve) => {
-    instance.updateContainer(
-      <BonSortiePdf bon={bon} qrCodeDataUrl={qrCodeDataUrl} />,
-      () => resolve(),
-    );
-  });
+  const instance = pdf(
+    <BonSortiePdf bon={bon} qrCodeDataUrl={qrCodeDataUrl} />,
+  );
   return instance.toBlob();
 };
 
@@ -47,5 +31,5 @@ export const downloadBlob = (blob: Blob, fileName: string) => {
   document.body.appendChild(link);
   link.click();
   link.remove();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 };

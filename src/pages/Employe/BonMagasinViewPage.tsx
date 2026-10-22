@@ -11,9 +11,11 @@ import {
 import RessourceCategorieBadge from "@/components/ressources/RessourceCategorieBadge";
 import BonMagasinStatutBadge from "@/components/status/BonMagasinStatutBadge";
 import UrgentBadge from "@/components/common/UrgentBadge";
-import BonMagasinPdfPreview from "@/components/bonmagasin/BonMagasinPdfPreview";
 import PageActionBar from "@/components/ui/PageActionBar";
 import { downloadBlob, generateBonMagasinBlob } from "@/utils/BonMagasinPdf";
+import { sanitizeFileName } from "@/utils/FileName";
+import { showToast } from "@/utils/Toast";
+import { TOAST_TYPE } from "@/constants/ToastType";
 import { getUniteLabel } from "@/constants/RessourceUnite";
 import { getDirectionLabel } from "@/constants/Direction";
 import { useGetBonMagasin } from "@/hooks/useGetBonMagasin";
@@ -30,34 +32,19 @@ const BonMagasinViewPage: React.FC = () => {
   const { data: bon, isLoading, isError } = useGetBonMagasin(id);
 
   const [pdfGenerating, setPdfGenerating] = useState(false);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
 
   const handleGeneratePdf = async (value: BonMagasinInterface) => {
     setPdfGenerating(true);
     try {
       const blob = await generateBonMagasinBlob(value);
-      setPreviewBlob(blob);
-      setPreviewUrl(URL.createObjectURL(blob));
-      setPreviewOpen(true);
+      downloadBlob(blob, `${sanitizeFileName(value.numeroBonMagasin)}.pdf`);
+    } catch {
+      showToast({
+        type: TOAST_TYPE.ERROR,
+        message: "Impossible de générer le PDF. Veuillez réessayer.",
+      });
     } finally {
       setPdfGenerating(false);
-    }
-  };
-
-  const handlePreviewChange = (open: boolean) => {
-    if (!open && previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      setPreviewUrl(null);
-      setPreviewBlob(null);
-    }
-    setPreviewOpen(open);
-  };
-
-  const handleDownload = () => {
-    if (previewBlob && bon) {
-      downloadBlob(previewBlob, `${bon.numeroBonMagasin}.pdf`);
     }
   };
 
@@ -235,14 +222,6 @@ const BonMagasinViewPage: React.FC = () => {
           </div>
         </>
       )}
-
-      <BonMagasinPdfPreview
-        open={previewOpen}
-        onOpenChange={handlePreviewChange}
-        url={previewUrl}
-        fileName={bon ? `${bon.numeroBonMagasin}.pdf` : "bon-de-magasin.pdf"}
-        onDownload={handleDownload}
-      />
     </div>
   );
 };

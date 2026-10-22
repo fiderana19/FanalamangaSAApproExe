@@ -7,8 +7,10 @@ import ConfirmDialog from "@/components/ui/confirm-dialog";
 import RessourceCategorieBadge from "@/components/ressources/RessourceCategorieBadge";
 import PageActionBar from "@/components/ui/PageActionBar";
 import BonSortieStatutBadge from "@/components/status/BonSortieStatutBadge";
-import BonMagasinPdfPreview from "@/components/bonmagasin/BonMagasinPdfPreview";
 import { downloadBlob, generateBonSortieBlob } from "@/utils/BonMagasinPdf";
+import { sanitizeFileName } from "@/utils/FileName";
+import { showToast } from "@/utils/Toast";
+import { TOAST_TYPE } from "@/constants/ToastType";
 import { getUniteLabel } from "@/constants/RessourceUnite";
 import { getDirectionLabel } from "@/constants/Direction";
 import { useGetBonSortie } from "@/hooks/useGetBonSortie";
@@ -29,9 +31,6 @@ const BonSortieViewPage: React.FC = () => {
 
   const [livrerDialogOpen, setLivrerDialogOpen] = useState(false);
   const [pdfGenerating, setPdfGenerating] = useState(false);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
 
   const enPreparation = bon?.statutSortie === "en_preparation";
   const livraisonLiee: LivraisonInterface | null =
@@ -55,26 +54,14 @@ const BonSortieViewPage: React.FC = () => {
     setPdfGenerating(true);
     try {
       const blob = await generateBonSortieBlob(value);
-      setPreviewBlob(blob);
-      setPreviewUrl(URL.createObjectURL(blob));
-      setPreviewOpen(true);
+      downloadBlob(blob, `${sanitizeFileName(value.numeroSortie)}.pdf`);
+    } catch {
+      showToast({
+        type: TOAST_TYPE.ERROR,
+        message: "Impossible de générer le PDF. Veuillez réessayer.",
+      });
     } finally {
       setPdfGenerating(false);
-    }
-  };
-
-  const handlePreviewChange = (open: boolean) => {
-    if (!open && previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      setPreviewUrl(null);
-      setPreviewBlob(null);
-    }
-    setPreviewOpen(open);
-  };
-
-  const handleDownload = () => {
-    if (previewBlob && bon) {
-      downloadBlob(previewBlob, `${bon.numeroSortie}.pdf`);
     }
   };
 
@@ -296,15 +283,6 @@ const BonSortieViewPage: React.FC = () => {
           </div>
         </>
       )}
-
-      <BonMagasinPdfPreview
-        open={previewOpen}
-        onOpenChange={handlePreviewChange}
-        url={previewUrl}
-        fileName={bon ? `${bon.numeroSortie}.pdf` : "bon-de-sortie.pdf"}
-        onDownload={handleDownload}
-        title="Aperçu du bon de sortie de magasin"
-      />
 
       <ConfirmDialog
         open={livrerDialogOpen}

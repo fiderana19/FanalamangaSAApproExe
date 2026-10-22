@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FileDown, PackageCheck, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageActionBar from "@/components/ui/PageActionBar";
-import BonMagasinPdfPreview from "@/components/bonmagasin/BonMagasinPdfPreview";
 import RessourceCategorieBadge from "@/components/ressources/RessourceCategorieBadge";
 import LivraisonStatutBadge from "@/components/status/LivraisonStatutBadge";
 import LigneSortieStatutBadge from "@/components/status/LigneSortieStatutBadge";
@@ -13,6 +12,9 @@ import { LigneSortieInterface } from "@/interfaces/BonSortie";
 import { formatDate } from "@/utils/Date";
 import { downloadBlob } from "@/utils/BonMagasinPdf";
 import { generateReceptionBlob } from "@/utils/ReceptionPdf";
+import { sanitizeFileName } from "@/utils/FileName";
+import { showToast } from "@/utils/Toast";
+import { TOAST_TYPE } from "@/constants/ToastType";
 import { pluriel } from "@/utils/Pluriel";
 import { getRessource } from "@/utils/Ressource";
 
@@ -35,9 +37,6 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
   const agent = livraison.utilisateur;
 
   const [pdfGenerating, setPdfGenerating] = useState(false);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
 
   const handleGeneratePdf = async () => {
     if (!reception) {
@@ -46,26 +45,14 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
     setPdfGenerating(true);
     try {
       const blob = await generateReceptionBlob(livraison);
-      setPreviewBlob(blob);
-      setPreviewUrl(URL.createObjectURL(blob));
-      setPreviewOpen(true);
+      downloadBlob(blob, `${sanitizeFileName(reception.numeroReception)}.pdf`);
+    } catch {
+      showToast({
+        type: TOAST_TYPE.ERROR,
+        message: "Impossible de générer le PDF. Veuillez réessayer.",
+      });
     } finally {
       setPdfGenerating(false);
-    }
-  };
-
-  const handlePreviewChange = (open: boolean) => {
-    if (!open && previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      setPreviewUrl(null);
-      setPreviewBlob(null);
-    }
-    setPreviewOpen(open);
-  };
-
-  const handleDownload = () => {
-    if (previewBlob && reception) {
-      downloadBlob(previewBlob, `${reception.numeroReception}.pdf`);
     }
   };
 
@@ -306,15 +293,6 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
           </Button>
         </PageActionBar>
       )}
-
-      <BonMagasinPdfPreview
-        open={previewOpen}
-        onOpenChange={handlePreviewChange}
-        url={previewUrl}
-        fileName={reception ? `${reception.numeroReception}.pdf` : "bon-de-reception.pdf"}
-        onDownload={handleDownload}
-        title="Aperçu du bon de réception"
-      />
     </div>
   );
 };

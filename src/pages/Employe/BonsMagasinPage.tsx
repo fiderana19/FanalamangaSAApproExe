@@ -35,9 +35,11 @@ import {
   getBonMagasinStatutLabel,
 } from "@/constants/BonMagasinStatut";
 import BonMagasinStatutBadge from "@/components/status/BonMagasinStatutBadge";
-import BonMagasinPdfPreview from "@/components/bonmagasin/BonMagasinPdfPreview";
 import { getBonMagasin } from "@/api/bonmagasins";
 import { downloadBlob, generateBonMagasinBlob } from "@/utils/BonMagasinPdf";
+import { sanitizeFileName } from "@/utils/FileName";
+import { showToast } from "@/utils/Toast";
+import { TOAST_TYPE } from "@/constants/ToastType";
 import { formatDate } from "@/utils/Date";
 import { pluriel } from "@/utils/Pluriel";
 
@@ -55,10 +57,6 @@ const BonsMagasinPage: React.FC = () => {
   const [sortDateDir, setSortDateDir] = useState<"asc" | "desc">("desc");
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
-  const [previewFileName, setPreviewFileName] = useState("bon-de-magasin.pdf");
   const [generatingBonId, setGeneratingBonId] = useState<string | null>(null);
 
   const handleGeneratePdf = async (bon: BonMagasinInterface) => {
@@ -67,27 +65,14 @@ const BonsMagasinPage: React.FC = () => {
       const response = await getBonMagasin(bon._id);
       const fullBon = response.data as BonMagasinInterface;
       const blob = await generateBonMagasinBlob(fullBon);
-      setPreviewBlob(blob);
-      setPreviewUrl(URL.createObjectURL(blob));
-      setPreviewFileName(`${fullBon.numeroBonMagasin}.pdf`);
-      setPreviewOpen(true);
+      downloadBlob(blob, `${sanitizeFileName(fullBon.numeroBonMagasin)}.pdf`);
+    } catch {
+      showToast({
+        type: TOAST_TYPE.ERROR,
+        message: "Impossible de générer le PDF. Veuillez réessayer.",
+      });
     } finally {
       setGeneratingBonId(null);
-    }
-  };
-
-  const handlePreviewChange = (open: boolean) => {
-    if (!open && previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      setPreviewUrl(null);
-      setPreviewBlob(null);
-    }
-    setPreviewOpen(open);
-  };
-
-  const handleDownload = () => {
-    if (previewBlob) {
-      downloadBlob(previewBlob, previewFileName);
     }
   };
 
@@ -416,13 +401,6 @@ const BonsMagasinPage: React.FC = () => {
         )}
       </div>
 
-      <BonMagasinPdfPreview
-        open={previewOpen}
-        onOpenChange={handlePreviewChange}
-        url={previewUrl}
-        fileName={previewFileName}
-        onDownload={handleDownload}
-      />
     </>
   );
 };
