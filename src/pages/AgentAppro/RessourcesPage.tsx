@@ -185,6 +185,7 @@ const RessourcesPage: React.FC = () => {
               <DropdownMenuContent align='end' className='w-56'>
                 <DropdownMenuItem
                   onSelect={() => navigate('/agent_appro/ressource/import')}
+                  className='text-brand focus:bg-brand/10 focus:text-brand'
                 >
                   <UploadOutlined /> Importer un fichier JSON
                 </DropdownMenuItem>

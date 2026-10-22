@@ -118,7 +118,7 @@ const ProfilePage: React.FC = () => {
                 </p>
                 <Button
                   type='button'
-                  variant='outline'
+                  variant='secondary'
                   className='w-full'
                   onClick={() => navigate(changePasswordUrl)}
                 >

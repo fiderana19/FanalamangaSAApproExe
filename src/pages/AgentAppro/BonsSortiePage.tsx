@@ -299,7 +299,7 @@ const BonsSortiePage: React.FC = () => {
                               type="button"
                               disabled={generatingSortieId === sortie._id}
                               onClick={() => handleGeneratePdf(sortie)}
-                              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+                              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-gray-600 outline-hidden select-none hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
                             >
                               {generatingSortieId === sortie._id ? (
                                 <LoadingOutlined />

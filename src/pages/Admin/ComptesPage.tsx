@@ -310,7 +310,7 @@ const ComptesPage: React.FC = () => {
                                   setUserToToggle(user);
                                 }}
                                 disabled={isBusy}
-                                className='flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-green-700 outline-hidden select-none hover:bg-green-50 disabled:opacity-50'
+                                className='flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-brand outline-hidden select-none hover:bg-brand/10 disabled:opacity-50'
                               >
                                 <CheckCircleOutlined /> Activer
                               </button>
@@ -438,6 +438,8 @@ const ComptesPage: React.FC = () => {
             ? 'Le compte ne pourra plus se connecter.'
             : 'Le compte pourra se connecter.'
         }
+        tone={userToToggle?.estActive ? 'danger' : 'brand'}
+        confirmVariant={userToToggle?.estActive ? 'alert' : 'brand'}
         confirmLabel={userToToggle?.estActive ? 'Désactiver' : 'Activer'}
         loadingLabel={userToToggle?.estActive ? 'Désactivation…' : 'Activation…'}
         loading={isActivating || isDeactivating}

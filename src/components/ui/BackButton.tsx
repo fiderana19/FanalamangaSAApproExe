@@ -8,7 +8,7 @@ const BackButton: React.FC = () => {
   return (
     <Button
       type='button'
-      variant='outline'
+      variant='secondary'
       size='icon'
       aria-label='Retour'
       onClick={() => navigate(-1)}

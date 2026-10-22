@@ -136,7 +136,7 @@ const DemandeAchatViewPage: React.FC = () => {
       <PageActionBar>
         <Button
           type='button'
-          variant='outline'
+          variant='secondary'
           onClick={() => handleGeneratePdf(demandeAchat)}
           disabled={pdfGenerating}
           className='shrink-0 shadow-md'
@@ -279,6 +279,8 @@ const DemandeAchatViewPage: React.FC = () => {
             <b>En cours</b>. Cette action est définitive.
           </>
         }
+        tone="brand"
+        confirmVariant="brand"
         confirmLabel="Marquer comme terminé"
         loadingLabel="Traitement…"
         loading={changerStatut.isPending || addStock.isPending}

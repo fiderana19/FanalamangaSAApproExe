@@ -17,8 +17,8 @@ import { pluriel } from "@/utils/Pluriel";
 
 const actions: QuickAction[] = [
     { label: "Nouveau service", to: "/admin/service/create", icon: Building2, variant: "brand" },
-    { label: "Nouvelle responsabilité", to: "/admin/responsabilite/create", icon: ShieldCheck },
-    { label: "Nouveau compte", to: "/admin/compte/create", icon: UserPlus },
+    { label: "Nouvelle responsabilité", to: "/admin/responsabilite/create", icon: ShieldCheck, variant: "brand" },
+    { label: "Nouveau compte", to: "/admin/compte/create", icon: UserPlus, variant: "brand" },
 ];
 
 const HomePage = () => {

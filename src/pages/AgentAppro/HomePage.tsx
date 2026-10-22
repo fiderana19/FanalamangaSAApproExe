@@ -21,7 +21,7 @@ import { compterPar, construireDonut } from "@/utils/Dashboard";
 
 const actions: QuickAction[] = [
     { label: "Nouvelle ressource", to: "/agent_appro/ressource/create", icon: FilePlus2, variant: "brand" },
-    { label: "Importer des ressources", to: "/agent_appro/ressource/import", icon: Upload },
+    { label: "Importer des ressources", to: "/agent_appro/ressource/import", icon: Upload, variant: "brand" },
 ];
 
 const HomePage = () => {

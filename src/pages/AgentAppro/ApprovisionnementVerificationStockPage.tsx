@@ -303,7 +303,7 @@ const ApprovisionnementVerificationStockPage: React.FC = () => {
         {auMoinsUneIndisponible && !demandeAchatExistante && (
           <Button
             type='button'
-            variant='outline'
+            variant='brand'
             onClick={() => navigate(`/agent_appro/demande-achat/create/${id}`)}
             className='shrink-0 shadow-md'
           >
@@ -314,7 +314,7 @@ const ApprovisionnementVerificationStockPage: React.FC = () => {
         {demandeAchatExistante && (
           <Button
             type='button'
-            variant='outline'
+            variant='secondary'
             onClick={() =>
               navigate(`/agent_appro/demande-achat/view/${demandeAchatExistante._id}`)
             }

@@ -119,7 +119,7 @@ const GestionDonneesSection: React.FC = () => {
           action={
             <Button
               type='button'
-              variant='outline'
+              variant='secondary'
               onClick={() => setIsDownloadConfirmOpen(true)}
               disabled={isDownloading}
             >
@@ -136,7 +136,7 @@ const GestionDonneesSection: React.FC = () => {
           action={
             <Button
               type='button'
-              variant='outline'
+              variant='destructive'
               onClick={() => fileInputRef.current?.click()}
               disabled={isRestoring}
             >
@@ -161,7 +161,7 @@ const GestionDonneesSection: React.FC = () => {
         description='Une copie complète de la base de données sera générée puis téléchargée au format JSON.'
         icon={<DownloadOutlined />}
         tone='brand'
-        confirmVariant='brand'
+        confirmVariant='secondary'
         confirmLabel='Télécharger'
         cancelLabel='Annuler'
         loadingLabel='Téléchargement…'

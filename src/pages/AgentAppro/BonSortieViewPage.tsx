@@ -113,7 +113,7 @@ const BonSortieViewPage: React.FC = () => {
             {livraisonLiee && (
               <Button
                 type='button'
-                variant='outline'
+                variant='secondary'
                 onClick={() => navigate(`/agent_appro/livraison/view/${livraisonLiee._id}`)}
                 className='shrink-0 shadow-md'
               >
@@ -134,7 +134,7 @@ const BonSortieViewPage: React.FC = () => {
             )}
             <Button
               type='button'
-              variant='brand'
+              variant='secondary'
               onClick={() => handleGeneratePdf(bon)}
               disabled={pdfGenerating}
               className='shrink-0 shadow-md'
@@ -295,6 +295,8 @@ const BonSortieViewPage: React.FC = () => {
           </>
         }
         warning="Cette action est définitive."
+        tone="brand"
+        confirmVariant="brand"
         confirmLabel="Livrer"
         loadingLabel="Traitement…"
         loading={changerStatut.isPending}

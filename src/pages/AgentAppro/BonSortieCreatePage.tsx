@@ -429,7 +429,7 @@ const BonSortieCreatePage: React.FC = () => {
               {lignesIndisponibles.length > 0 && (
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="brand"
                   className="shadow-md"
                   onClick={() =>
                     navigate(`/agent_appro/demande-achat/create/${approvisionnementId}`)

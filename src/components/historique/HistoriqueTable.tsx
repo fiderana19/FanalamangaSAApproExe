@@ -252,7 +252,7 @@ function HistoriqueTable<T>({
         <div className="absolute bottom-0 right-0 flex gap-2">
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => setPendingExport("csv")}
             className="gap-1.5"
@@ -262,7 +262,7 @@ function HistoriqueTable<T>({
           </Button>
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => setPendingExport("excel")}
             className="gap-1.5"
@@ -285,7 +285,7 @@ function HistoriqueTable<T>({
           )
         }
         tone='brand'
-        confirmVariant='brand'
+        confirmVariant='secondary'
         confirmLabel='Exporter'
         cancelLabel='Annuler'
         onConfirm={pendingExport === "csv" ? handleExportCsv : handleExportExcel}

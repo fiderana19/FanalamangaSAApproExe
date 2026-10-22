@@ -37,7 +37,7 @@ const DemandeEditForm: React.FC<DemandeEditFormProps> = ({ demande }) => {
         <div className='text-sm text-brand-muted mb-4'>
           Cette demande ne peut plus être modifiée.
         </div>
-        <Button type='button' variant='brand' onClick={() => navigate(`/employe/demande/view/${demande._id}`)}>
+        <Button type='button' variant='secondary' onClick={() => navigate(`/employe/demande/view/${demande._id}`)}>
           Retour à la demande
         </Button>
       </div>

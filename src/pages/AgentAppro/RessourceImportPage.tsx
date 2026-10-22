@@ -208,7 +208,7 @@ const RessourceImportPage: React.FC = () => {
 
             <Button
               type='button'
-              variant='brand'
+              variant='secondary'
               onClick={() => navigate('/agent_appro/ressource')}
               className='mt-5 w-full'
             >

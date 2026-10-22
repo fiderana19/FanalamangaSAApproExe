@@ -107,7 +107,7 @@ const BonMagasinViewPage: React.FC = () => {
           <PageActionBar>
             <Button
               type='button'
-              variant='brand'
+              variant='secondary'
               onClick={() => handleGeneratePdf(bon)}
               disabled={pdfGenerating}
               className='shrink-0 shadow-md'

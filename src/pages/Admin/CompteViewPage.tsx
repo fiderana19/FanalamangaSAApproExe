@@ -197,14 +197,10 @@ const CompteViewPage: React.FC = () => {
             </Button>
             <Button
               type='button'
-              variant='secondary'
+              variant={user.estActive ? 'alert' : 'brand'}
               onClick={() => setToggleOpen(true)}
               disabled={isBusy}
-              className={`shrink-0 shadow-md ${
-                user.estActive
-                  ? 'text-amber-700 hover:bg-amber-50'
-                  : 'text-green-700 hover:bg-green-50'
-              }`}
+              className='shrink-0 shadow-md'
             >
               {isBusy ? <LoadingOutlined /> : null}
               {user.estActive ? (
@@ -219,10 +215,10 @@ const CompteViewPage: React.FC = () => {
             </Button>
             <Button
               type='button'
-              variant='outline'
+              variant='destructive'
               onClick={() => setDeleteOpen(true)}
               disabled={isDeleting}
-              className='shrink-0 shadow-md text-destructive hover:bg-destructive/10'
+              className='shrink-0 shadow-md'
             >
               {isDeleting ? <LoadingOutlined /> : <DeleteOutlined />}
               Supprimer
@@ -271,6 +267,8 @@ const CompteViewPage: React.FC = () => {
             ? 'Le compte ne pourra plus se connecter.'
             : 'Le compte pourra se connecter.'
         }
+        tone={user?.estActive ? 'danger' : 'brand'}
+        confirmVariant={user?.estActive ? 'alert' : 'brand'}
         confirmLabel={user?.estActive ? 'Désactiver' : 'Activer'}
         loadingLabel={user?.estActive ? 'Désactivation…' : 'Activation…'}
         loading={isActivating || isDeactivating}
