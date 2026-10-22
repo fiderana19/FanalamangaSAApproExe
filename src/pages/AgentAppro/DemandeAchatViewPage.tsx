@@ -114,13 +114,13 @@ const DemandeAchatViewPage: React.FC = () => {
   return (
     <div className='flex flex-col gap-6 pb-14'>
       <div className='w-full panel p-6 flex items-center gap-5'>
-        <div className='grid place-items-center size-12 rounded-lg bg-orange-50 text-orange-600 shrink-0'>
+        <div className='grid place-items-center size-12 rounded-lg bg-gray-100 text-gray-700 shrink-0'>
           <PackageSearch className='w-6 h-6' />
         </div>
         <div className='flex flex-1 flex-col justify-center gap-1 min-w-0'>
           <h1 className='text-base font-bold truncate flex items-center gap-2'>
             <span className='truncate'>Demande d'achat</span>
-            <span className='inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-xs font-semibold text-teal-700 shrink-0'>
+            <span className='inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-700 shrink-0'>
               {demandeAchat.numeroDemandeAchat}
             </span>
           </h1>
@@ -166,7 +166,7 @@ const DemandeAchatViewPage: React.FC = () => {
               <div className='grid gap-3 text-sm'>
                 <div className='flex items-center justify-between gap-3'>
                   <span className='text-muted-foreground'>N° approvisionnement</span>
-                  <span className='inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-xs font-semibold text-teal-700'>
+                  <span className='inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-700'>
                     {appro.numeroApprovisionnement}
                   </span>
                 </div>

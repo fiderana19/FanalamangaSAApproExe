@@ -4,7 +4,8 @@ import HistoriqueTable, {
 } from "@/components/historique/HistoriqueTable";
 import { useGetHistoriqueTraitementsAppro } from "@/hooks/useGetHistoriqueTraitementsAppro";
 import {
-  APPROVISIONNEMENT_STATUTS,
+  APPROVISIONNEMENT_STATUTS_AFFICHES,
+  getApprovisionnementStatutDisplayLabel,
   getApprovisionnementStatutLabel,
 } from "@/constants/ApprovisionnementStatut";
 import { formatDate } from "@/utils/Date";
@@ -21,9 +22,9 @@ const HistoriqueTraitementsApproPage: React.FC = () => {
 
   const traitements = (data ?? []) as TraitementApproHistoriqueInterface[];
 
-  const statutOptions = APPROVISIONNEMENT_STATUTS.map((value) => ({
+  const statutOptions = APPROVISIONNEMENT_STATUTS_AFFICHES.map((value) => ({
     value,
-    label: getApprovisionnementStatutLabel(value),
+    label: value,
   }));
 
   const columns: HistoriqueColumn<TraitementApproHistoriqueInterface>[] = [
@@ -72,7 +73,9 @@ const HistoriqueTraitementsApproPage: React.FC = () => {
       searchPlaceholder='Recherche par mot-clé…'
       exportBaseName='historique-approvisionnements'
       getDate={(item) => item.dateTraitementAppro}
-      getStatut={(item) => item.statutTraitementAppro}
+      getStatut={(item) =>
+        getApprovisionnementStatutDisplayLabel(item.statutTraitementAppro)
+      }
       statutOptions={statutOptions}
     />
   );

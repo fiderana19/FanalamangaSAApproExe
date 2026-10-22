@@ -83,12 +83,12 @@ const BonSortieViewPage: React.FC = () => {
       ) : (
         <>
           <div className='w-full panel p-5 flex items-center gap-5'>
-            <div className='grid place-items-center size-14 rounded-lg bg-teal-50 text-teal-600 shrink-0'>
+            <div className='grid place-items-center size-14 rounded-lg bg-gray-100 text-gray-700 shrink-0'>
               <PackageOpen className='w-7 h-7' />
             </div>
             <div className='flex flex-1 flex-col justify-center gap-1 min-w-0'>
               <h1 className='text-lg font-bold truncate flex items-center gap-2'>
-                <span className='inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-sm font-semibold text-teal-700'>
+                <span className='inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-sm font-semibold text-gray-700'>
                   {bon.numeroSortie}
                 </span>
                 <span className='truncate'>Bon de sortie de magasin</span>
@@ -189,7 +189,7 @@ const BonSortieViewPage: React.FC = () => {
                   <div className='text-sm text-gray-700'>
                     {bon.approvisionnement ? (
                       <>
-                        <span className='inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-xs font-semibold text-teal-700 mr-2'>
+                        <span className='inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-700 mr-2'>
                           {bon.approvisionnement.numeroApprovisionnement}
                         </span>
                         {bon.approvisionnement.objet}

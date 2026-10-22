@@ -24,8 +24,8 @@ import {
 import { useGetApprovisionnements } from "@/hooks/useGetApprovisionnements";
 import { ApprovisionnementInterface } from "@/interfaces/Approvisionnement";
 import {
-  APPROVISIONNEMENT_STATUTS,
-  getApprovisionnementStatutLabel,
+  APPROVISIONNEMENT_STATUTS_AFFICHES,
+  getApprovisionnementStatutDisplayLabel,
 } from "@/constants/ApprovisionnementStatut";
 import ApprovisionnementStatutBadge from "@/components/status/ApprovisionnementStatutBadge";
 import { formatDate } from "@/utils/Date";
@@ -69,7 +69,9 @@ const ApprovisionnementsPage: React.FC = () => {
     filterRef
       ? (approvisionnements ?? []).filter(
           (approvisionnement: ApprovisionnementInterface) =>
-            approvisionnement.statutApprovisionnement === filterText,
+            getApprovisionnementStatutDisplayLabel(
+              approvisionnement.statutApprovisionnement,
+            ) === filterText,
         )
       : approvisionnements ?? []
   )
@@ -180,9 +182,9 @@ const ApprovisionnementsPage: React.FC = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tous les statuts</SelectItem>
-              {APPROVISIONNEMENT_STATUTS.map((statut) => (
+              {APPROVISIONNEMENT_STATUTS_AFFICHES.map((statut) => (
                 <SelectItem key={statut} value={statut}>
-                  {getApprovisionnementStatutLabel(statut)}
+                  {statut}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -266,7 +268,7 @@ const ApprovisionnementsPage: React.FC = () => {
                           {formatDate(approvisionnement.dateApprovisionnement)}
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
-                          <span className="inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-xs font-semibold text-teal-700">
+                          <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-700">
                             {approvisionnement.numeroApprovisionnement}
                           </span>
                         </td>

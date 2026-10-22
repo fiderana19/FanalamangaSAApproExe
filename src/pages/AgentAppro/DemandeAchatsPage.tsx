@@ -229,14 +229,14 @@ const DemandeAchatsPage: React.FC = () => {
                         {formatDate(demandeAchat.dateDemandeAchat)}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-xs font-semibold text-teal-700">
+                        <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-700">
                           {demandeAchat.numeroDemandeAchat}
                         </span>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         {appro ? (
                           <div className="flex flex-col gap-0.5">
-                            <span className="font-medium text-foreground">
+                            <span className="font-medium text-gray-700">
                               {appro.numeroApprovisionnement}
                             </span>
                             <span className="text-xs text-muted-foreground truncate max-w-[220px]">

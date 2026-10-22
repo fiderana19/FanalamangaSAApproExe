@@ -40,6 +40,7 @@ export const STATUT_CHART_COLORS: Record<string, string> = {
     conforme: "#10b981",
     non_conforme: "#f43f5e",
     en_cours: "#f59e0b",
+    "En cours (partiel)": "#9ca3af",
     termine: "#22c55e",
     livree: "#14b8a6",
     en_cours_achat: "#f97316",

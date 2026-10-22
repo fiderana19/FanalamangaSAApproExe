@@ -59,12 +59,12 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
   return (
     <div className='flex flex-col gap-5 pb-14'>
       <div className='w-full panel p-5 flex items-center gap-5'>
-        <div className='grid place-items-center size-14 rounded-lg bg-sky-50 text-sky-600 shrink-0'>
+        <div className='grid place-items-center size-14 rounded-lg bg-gray-100 text-gray-700 shrink-0'>
           <Truck className='w-7 h-7' />
         </div>
         <div className='flex flex-1 flex-col justify-center gap-1 min-w-0'>
           <h1 className='text-lg font-bold truncate flex items-center gap-2'>
-            <span className='inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-sm font-semibold text-teal-700'>
+            <span className='inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-sm font-semibold text-gray-700'>
               {livraison.numeroLivraison}
             </span>
             <span className='truncate'>Livraison</span>
@@ -121,7 +121,7 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
               <div className='text-[11px] uppercase tracking-wider text-muted-foreground'>Bon de sortie lié</div>
               <div className='text-sm text-gray-700'>
                 {sortie ? (
-                  <span className='inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-xs font-semibold text-teal-700'>
+                  <span className='inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-700'>
                     {sortie.numeroSortie}
                   </span>
                 ) : (
@@ -133,7 +133,7 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
               <div className='text-[11px] uppercase tracking-wider text-muted-foreground'>Approvisionnement lié</div>
               <div className='text-sm text-gray-700'>
                 {appro ? (
-                  <span className='inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-xs font-semibold text-teal-700'>
+                  <span className='inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-700'>
                     {appro.numeroApprovisionnement}
                   </span>
                 ) : (
@@ -165,7 +165,7 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
                 <div>
                   <div className='text-[11px] uppercase tracking-wider text-muted-foreground'>N° réception</div>
                   <div className='text-sm text-gray-700'>
-                    <span className='inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-xs font-semibold text-teal-700'>
+                    <span className='inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-700'>
                       {reception.numeroReception}
                     </span>
                   </div>

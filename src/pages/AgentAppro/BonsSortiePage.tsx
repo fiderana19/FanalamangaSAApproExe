@@ -250,7 +250,7 @@ const BonsSortiePage: React.FC = () => {
                       {formatDate(sortie.dateSortie)}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className="inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-xs font-semibold text-teal-700">
+                      <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-700">
                         {sortie.numeroSortie}
                       </span>
                     </td>

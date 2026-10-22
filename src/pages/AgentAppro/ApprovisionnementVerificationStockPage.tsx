@@ -138,14 +138,14 @@ const ApprovisionnementVerificationStockPage: React.FC = () => {
   return (
     <div className='flex flex-col gap-6 pb-14'>
       <div className='w-full panel p-6 flex items-center gap-5'>
-        <div className='grid place-items-center size-12 rounded-lg bg-teal-50 text-teal-600 shrink-0'>
+        <div className='grid place-items-center size-12 rounded-lg bg-gray-100 text-gray-700 shrink-0'>
           <PackageSearch className='w-6 h-6' />
         </div>
         <div className='flex flex-1 flex-col justify-center gap-1 min-w-0'>
           <h1 className='text-base font-bold truncate flex items-center gap-2'>
             <span className='truncate'>Disponibilité des ressources</span>
             {approvisionnement?.numeroApprovisionnement && (
-              <span className='inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 font-mono text-xs font-semibold text-teal-700 shrink-0'>
+              <span className='inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs font-semibold text-gray-700 shrink-0'>
                 {approvisionnement.numeroApprovisionnement}
               </span>
             )}

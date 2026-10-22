@@ -117,7 +117,7 @@ const LivraisonScanPage: React.FC = () => {
   return (
     <div className='flex flex-col gap-5 pb-14'>
       <div className='w-full panel p-5 flex items-center gap-5'>
-        <div className='grid place-items-center size-14 rounded-lg bg-sky-50 text-sky-600 shrink-0'>
+        <div className='grid place-items-center size-14 rounded-lg bg-gray-100 text-gray-700 shrink-0'>
           <QrCode className='w-7 h-7' />
         </div>
         <div className='flex flex-1 flex-col justify-center gap-1 min-w-0'>
