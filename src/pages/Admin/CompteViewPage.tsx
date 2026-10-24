@@ -175,14 +175,6 @@ const CompteViewPage: React.FC = () => {
                   value={getResponsabiliteLabel(user.responsabilite)}
                 />
               </div>
-
-              <div className={`${cardClassName} w-full`}>
-                <SectionHeader title='Responsabilité' />
-                <InfoItem
-                  icon={<Tag className='w-6 h-6' />}
-                  value={getResponsabiliteLabel(user.responsabilite)}
-                />
-              </div>
             </div>
           </div>
 
