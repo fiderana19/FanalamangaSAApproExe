@@ -44,6 +44,7 @@ export const QUERY_INVALIDATION_GROUPS = {
     QueryCacheKey.RECEPTION,
     QueryCacheKey.LIVRAISON,
     QueryCacheKey.BONS_SORTIE,
+    QueryCacheKey.APPROVISIONNEMENT,
   ],
   ressource: [QueryCacheKey.RESSOURCES],
   ressourceImpact: [
