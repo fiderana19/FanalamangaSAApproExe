@@ -28,8 +28,10 @@ export const getBonSortieByAppro = async (approvisionnementId: string) => {
 export const changerStatutBonSortie = async (
   id: string,
   statut: SortieStatutType,
+  livreurId?: string,
 ) => {
   return await axiosAuthInstance.patch(`${BonSortieAPIUrl}/${id}/statut`, {
     statut,
+    livreurId,
   });
 }

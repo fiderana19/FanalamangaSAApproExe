@@ -11,8 +11,15 @@ export const useChangerStatutBonSortie = ({
 }: { action?: (data?: unknown) => void } = {}) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: ({ id, statut }: { id: string; statut: SortieStatutType }) =>
-      changerStatutBonSortie(id, statut),
+    mutationFn: ({
+      id,
+      statut,
+      livreurId,
+    }: {
+      id: string;
+      statut: SortieStatutType;
+      livreurId?: string;
+    }) => changerStatutBonSortie(id, statut, livreurId),
     onSuccess: (response) => {
       invalidateKeys(queryClient, QUERY_INVALIDATION_GROUPS.sortieStatut);
       if (action) {

@@ -90,6 +90,10 @@ export const getUsers = async () => {
   return await axiosAuthInstance.get(`${UserAPIUrl}/users`);
 }
 
+export const getAgentsAppro = async () => {
+  return await axiosAuthInstance.get(`${UserAPIUrl}/agents-appro`);
+}
+
 export const getUser = async (id: string) => {
   return await axiosAuthInstance.get(`${UserAPIUrl}/${id}`);
 }

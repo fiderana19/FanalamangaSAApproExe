@@ -164,7 +164,7 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
               </div>
             </div>
             <div>
-              <div className='text-[11px] uppercase tracking-wider text-muted-foreground'>Agent</div>
+              <div className='text-[11px] uppercase tracking-wider text-muted-foreground'>Livreur</div>
               <div className='text-sm text-gray-700'>
                 {agent ? `${agent.nom ?? ""} ${agent.prenom ?? ""}`.trim() : "—"}
               </div>

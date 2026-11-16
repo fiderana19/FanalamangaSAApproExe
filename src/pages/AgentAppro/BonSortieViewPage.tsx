@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { FileDown, PackageOpen, Truck } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ConfirmDialog from "@/components/ui/confirm-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import RessourceCategorieBadge from "@/components/ressources/RessourceCategorieBadge";
 import PageActionBar from "@/components/ui/PageActionBar";
 import BonSortieStatutBadge from "@/components/status/BonSortieStatutBadge";
@@ -16,8 +23,10 @@ import { getDirectionLabel } from "@/constants/Direction";
 import { useGetBonSortie } from "@/hooks/useGetBonSortie";
 import { useChangerStatutBonSortie } from "@/hooks/useChangerStatutBonSortie";
 import { useGetLivraisonsParSortie } from "@/hooks/useGetLivraisonsParSortie";
+import { useGetAgentsAppro } from "@/hooks/useGetAgentsAppro";
+import { useGetProfile } from "@/hooks/useGetProfile";
 import { BonSortieInterface, LigneSortieInterface } from "@/interfaces/BonSortie";
-import { LivraisonInterface } from "@/interfaces/Livraison";
+import { LivraisonInterface, LivraisonUtilisateurRef } from "@/interfaces/Livraison";
 import { formatDate } from "@/utils/Date";
 import { getRessource } from "@/utils/Ressource";
 import { pluriel } from "@/utils/Pluriel";
@@ -28,20 +37,30 @@ const BonSortieViewPage: React.FC = () => {
   const { data: bon, isLoading, isError } = useGetBonSortie(id);
   const changerStatut = useChangerStatutBonSortie();
   const { data: livraisons } = useGetLivraisonsParSortie(id);
+  const { data: profile } = useGetProfile();
+  const { data: agentsAppro, isLoading: agentsLoading } = useGetAgentsAppro();
 
   const [livrerDialogOpen, setLivrerDialogOpen] = useState(false);
+  const [livreurId, setLivreurId] = useState("");
   const [pdfGenerating, setPdfGenerating] = useState(false);
 
   const enPreparation = bon?.statutSortie === "en_preparation";
   const livraisonLiee: LivraisonInterface | null =
     (livraisons as LivraisonInterface[])?.[0] ?? null;
+  const agents = (agentsAppro as LivraisonUtilisateurRef[] | undefined) ?? [];
+
+  useEffect(() => {
+    if (livrerDialogOpen && profile?._id && profile.role === "agent_appro") {
+      setLivreurId(profile._id);
+    }
+  }, [livrerDialogOpen, profile?._id, profile?.role]);
 
   const handleLivrer = () => {
-    if (!id) {
+    if (!id || !livreurId) {
       return;
     }
     changerStatut.mutate(
-      { id, statut: "sorti" },
+      { id, statut: "sorti", livreurId },
       {
         onSuccess: () => {
           setLivrerDialogOpen(false);
@@ -290,9 +309,48 @@ const BonSortieViewPage: React.FC = () => {
         description={
           <>
             Le bon de sortie <b>{bon?.numeroSortie}</b> va être livré. Une
-            livraison sera automatiquement créée et l'approvisionnement lié sera
-            mis à jour.
+            livraison sera automatiquement créée et assignée au livreur
+            sélectionné. L'approvisionnement lié sera mis à jour.
           </>
+        }
+        content={
+          <div className='flex flex-col gap-1.5'>
+            <label
+              htmlFor='livreur-select'
+              className='text-[11px] uppercase tracking-wider text-muted-foreground'
+            >
+              Livreur
+            </label>
+            <Select
+              value={livreurId}
+              onValueChange={setLivreurId}
+              disabled={agentsLoading || agents.length === 0}
+            >
+              <SelectTrigger id='livreur-select' className='w-full'>
+                <SelectValue
+                  placeholder={
+                    agentsLoading
+                      ? "Chargement des agents…"
+                      : "Sélectionner un livreur"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {agents.map((agent) => (
+                  <SelectItem key={agent._id} value={agent._id}>
+                    {`${agent.nom ?? ""} ${agent.prenom ?? ""}`.trim() ||
+                      "Agent sans nom"}
+                    {agent._id === profile?._id ? " (vous)" : ""}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {!agentsLoading && agents.length === 0 && (
+              <p className='text-xs text-red-600'>
+                Aucun agent d'approvisionnement actif n'est disponible.
+              </p>
+            )}
+          </div>
         }
         warning="Cette action est définitive."
         tone="brand"
@@ -300,6 +358,7 @@ const BonSortieViewPage: React.FC = () => {
         confirmLabel="Livrer"
         loadingLabel="Traitement…"
         loading={changerStatut.isPending}
+        confirmDisabled={!livreurId || agentsLoading}
         icon={<Truck className='size-6 text-brand' />}
         onConfirm={handleLivrer}
         onCancel={() => setLivrerDialogOpen(false)}

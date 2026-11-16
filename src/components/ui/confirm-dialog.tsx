@@ -7,11 +7,13 @@ interface ConfirmDialogProps {
   open: boolean;
   title: string;
   description: React.ReactNode;
+  content?: React.ReactNode;
   warning?: string;
   confirmLabel?: string;
   cancelLabel?: string;
   loadingLabel?: string;
   loading?: boolean;
+  confirmDisabled?: boolean;
   icon?: React.ReactNode;
   tone?: "danger" | "brand";
   confirmVariant?: React.ComponentProps<typeof Button>["variant"];
@@ -23,11 +25,13 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   open,
   title,
   description,
+  content,
   warning,
   confirmLabel = "Confirmer",
   cancelLabel = "Annuler",
   loadingLabel = "Traitement…",
   loading = false,
+  confirmDisabled = false,
   icon,
   tone = "danger",
   confirmVariant = "destructive",
@@ -115,6 +119,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             <p id={descriptionId} className='mt-1 text-sm text-muted-foreground'>
               {description}
             </p>
+            {content && <div className='mt-4'>{content}</div>}
             {warning && (
               <p className='mt-2 flex items-start gap-1.5 text-xs text-red-600'>
                 <InfoCircleOutlined className='mt-0.5 shrink-0' />
@@ -135,7 +140,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           <Button
             variant={confirmVariant}
             onClick={onConfirm}
-            disabled={loading}
+            disabled={loading || confirmDisabled}
           >
             {loading ? (
               <>
