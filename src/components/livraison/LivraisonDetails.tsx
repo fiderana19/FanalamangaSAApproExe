@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { FileDown, PackageCheck, Truck } from "lucide-react";
+import { FileDown, PackageCheck, RefreshCw, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageActionBar from "@/components/ui/PageActionBar";
 import RessourceCategorieBadge from "@/components/ressources/RessourceCategorieBadge";
 import LivraisonStatutBadge from "@/components/status/LivraisonStatutBadge";
 import LigneSortieStatutBadge from "@/components/status/LigneSortieStatutBadge";
+import StatutReceptionBadge from "@/components/status/StatutReceptionBadge";
 import { getUniteLabel } from "@/constants/RessourceUnite";
 import { getDirectionLabel } from "@/constants/Direction";
 import { LivraisonInterface } from "@/interfaces/Livraison";
@@ -12,6 +13,7 @@ import { LigneSortieInterface } from "@/interfaces/BonSortie";
 import { formatDate } from "@/utils/Date";
 import { downloadBlob } from "@/utils/BonMagasinPdf";
 import { generateReceptionBlob } from "@/utils/ReceptionPdf";
+import { generateRegularisationBlob } from "@/utils/RegularisationPdf";
 import { sanitizeFileName } from "@/utils/FileName";
 import { showToast } from "@/utils/Toast";
 import { TOAST_TYPE } from "@/constants/ToastType";
@@ -35,8 +37,33 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
   const service = demandeur?.service;
   const reception = livraison.reception;
   const agent = livraison.utilisateur;
+  const lignesRegularisees = (livraison.lignes ?? []).filter(
+    (ligne) => ligne.statutLigneSortie === "regularise",
+  );
+  const dateRegularisation =
+    reception?.dateRegularisation ??
+    lignesRegularisees.find((ligne) => ligne.dateRegularisation)
+      ?.dateRegularisation ??
+    livraison.dateRegularisation ??
+    null;
+  const motifRegularisation =
+    reception?.motifRegularisation ??
+    lignesRegularisees.find((ligne) => ligne.motifRegularisation)
+      ?.motifRegularisation ??
+    "";
+  const commentaireRegularisation =
+    reception?.commentaireRegularisation ?? "";
+  const auteurRegularisation =
+    reception?.utilisateurRegularisation ??
+    lignesRegularisees.find((ligne) => ligne.utilisateurRegularisation)
+      ?.utilisateurRegularisation ??
+    null;
+  const aRegularisation =
+    !!dateRegularisation || lignesRegularisees.length > 0;
 
   const [pdfGenerating, setPdfGenerating] = useState(false);
+  const [regularisationPdfGenerating, setRegularisationPdfGenerating] =
+    useState(false);
 
   const handleGeneratePdf = async () => {
     if (!reception) {
@@ -56,6 +83,25 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
     }
   };
 
+  const handleGenerateRegularisationPdf = async () => {
+    setRegularisationPdfGenerating(true);
+    try {
+      const blob = await generateRegularisationBlob(livraison);
+      downloadBlob(
+        blob,
+        `${sanitizeFileName(`regularisation-${livraison.numeroLivraison}`)}.pdf`,
+      );
+    } catch {
+      showToast({
+        type: TOAST_TYPE.ERROR,
+        message:
+          "Impossible de générer le PDF de régularisation. Veuillez réessayer.",
+      });
+    } finally {
+      setRegularisationPdfGenerating(false);
+    }
+  };
+
   return (
     <div className='flex flex-col gap-5 pb-14'>
       <div className='w-full panel p-5 flex items-center gap-5'>
@@ -71,6 +117,12 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
           </h1>
           <div className='flex items-center gap-2 flex-wrap'>
             <LivraisonStatutBadge statut={livraison.statutLivraison} size='md' />
+            {reception && (
+              <StatutReceptionBadge
+                statut={livraison.statutReception}
+                size='md'
+              />
+            )}
           </div>
         </div>
       </div>
@@ -176,14 +228,46 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
                 </div>
                 <div>
                   <div className='text-[11px] uppercase tracking-wider text-muted-foreground'>Conformité</div>
-                  <div className='text-sm text-gray-700'>
-                    {reception.estConforme ? "Conforme" : "Non conforme"}
+                  <div className='mt-1'>
+                    <StatutReceptionBadge statut={reception.statutConformite} />
                   </div>
                 </div>
                 {reception.commentaireReception?.trim() && (
                   <div>
                     <div className='text-[11px] uppercase tracking-wider text-muted-foreground'>Commentaire</div>
                     <div className='text-sm text-gray-700'>{reception.commentaireReception}</div>
+                  </div>
+                )}
+                {aRegularisation && (
+                  <div className='rounded-lg bg-amber-50 p-3 text-sm text-amber-800'>
+                    <div className='flex items-center gap-2 font-semibold'>
+                      <RefreshCw className='size-3.5' />
+                      Régularisation
+                    </div>
+                    <div className='mt-2 grid gap-1 text-xs'>
+                      <div>
+                        <span className='font-semibold'>Date : </span>
+                        {dateRegularisation
+                          ? formatDate(dateRegularisation)
+                          : "—"}
+                      </div>
+                      <div>
+                        <span className='font-semibold'>Motif : </span>
+                        {motifRegularisation || "—"}
+                      </div>
+                      {commentaireRegularisation.trim() && (
+                        <div>
+                          <span className='font-semibold'>Commentaire : </span>
+                          {commentaireRegularisation}
+                        </div>
+                      )}
+                      <div>
+                        <span className='font-semibold'>Par : </span>
+                        {auteurRegularisation
+                          ? `${auteurRegularisation.nom ?? ""} ${auteurRegularisation.prenom ?? ""}`.trim()
+                          : "—"}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -259,6 +343,16 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
                       </td>
                       <td className='px-4 py-3 whitespace-nowrap'>
                         <LigneSortieStatutBadge statut={ligne.statutLigneSortie} />
+                        {ligne.statutLigneSortie === "regularise" && (
+                          <div className='mt-1 text-[11px] text-muted-foreground'>
+                            {ligne.dateReceptionEffective
+                              ? `Reçue le ${formatDate(ligne.dateReceptionEffective)}`
+                              : "Régularisée"}
+                            {ligne.quantiteRegularisee !== null &&
+                              ligne.quantiteRegularisee !== undefined &&
+                              ` · Qté ${ligne.quantiteRegularisee}`}
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );
@@ -277,6 +371,22 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
 
       {reception && afficherBonReception && (
         <PageActionBar>
+          {aRegularisation && (
+            <Button
+              type='button'
+              variant='outline'
+              onClick={handleGenerateRegularisationPdf}
+              disabled={regularisationPdfGenerating}
+              className='shrink-0 shadow-md'
+            >
+              {regularisationPdfGenerating ? (
+                <span className='size-4 animate-spin rounded-full border-2 border-current border-t-transparent' />
+              ) : (
+                <RefreshCw className='size-4' />
+              )}
+              Générer le bon de régularisation
+            </Button>
+          )}
           <Button
             type='button'
             variant='secondary'

@@ -13,8 +13,8 @@ export const useChangerStatutLivraison = ({
   const mutation = useMutation({
     mutationFn: ({ id, statut }: { id: string; statut: LivraisonStatutType }) =>
       changerStatutLivraison(id, statut),
-    onSuccess: (response) => {
-      invalidateKeys(queryClient, QUERY_INVALIDATION_GROUPS.livraison);
+    onSuccess: async (response) => {
+      await invalidateKeys(queryClient, QUERY_INVALIDATION_GROUPS.livraison);
       if (action) {
         action(response?.data);
       }

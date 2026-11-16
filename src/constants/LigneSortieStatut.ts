@@ -1,4 +1,10 @@
-import { PackageCheck, PackageOpen, PackageX, Truck } from "lucide-react";
+import {
+  PackageCheck,
+  PackageOpen,
+  PackageX,
+  RefreshCw,
+  Truck,
+} from "lucide-react";
 import { StatutMeta } from "./DemandeStatut";
 
 export const LIGNE_SORTIE_STATUT_LABELS: Record<string, string> = {
@@ -6,6 +12,7 @@ export const LIGNE_SORTIE_STATUT_LABELS: Record<string, string> = {
   en_livraison: "En livraison",
   livree: "Livrée",
   non_recu: "Non reçu",
+  regularise: "Régularisée",
 };
 
 export const LIGNE_SORTIE_STATUTS = Object.keys(LIGNE_SORTIE_STATUT_LABELS);
@@ -33,6 +40,11 @@ export const LIGNE_SORTIE_STATUT_META: Record<string, StatutMeta> = {
     icon: PackageX,
     badge: "bg-red-50 text-red-600",
     dot: "bg-red-500",
+  },
+  regularise: {
+    icon: RefreshCw,
+    badge: "bg-amber-50 text-amber-700",
+    dot: "bg-amber-500",
   },
 };
 

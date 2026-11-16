@@ -12,8 +12,8 @@ export const useCreateReception = ({
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (data: ManageReceptionInterface) => createReception(data),
-    onSuccess: (response) => {
-      invalidateKeys(queryClient, QUERY_INVALIDATION_GROUPS.reception);
+    onSuccess: async (response) => {
+      await invalidateKeys(queryClient, QUERY_INVALIDATION_GROUPS.reception);
       if (action) {
         action(response?.data);
       }

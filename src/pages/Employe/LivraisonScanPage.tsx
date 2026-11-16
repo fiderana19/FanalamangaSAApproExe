@@ -4,8 +4,7 @@ import { Html5Qrcode } from "html5-qrcode";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "@/utils/Toast";
 import { TOAST_TYPE } from "@/constants/ToastType";
-import { useGetLivraisonsParSortie } from "@/hooks/useGetLivraisonsParSortie";
-import { LivraisonInterface } from "@/interfaces/Livraison";
+import { useGetAnomaliesParSortie } from "@/hooks/useGetAnomaliesParSortie";
 
 const REGION_ID = "livraison-qr-region";
 
@@ -80,8 +79,9 @@ const LivraisonScanPage: React.FC = () => {
     setSortieId(null);
   }, []);
 
-  const { data: livraisons, isLoading, isError } =
-    useGetLivraisonsParSortie(sortieId ?? undefined);
+  const { data, isLoading, isError } = useGetAnomaliesParSortie(
+    sortieId ?? undefined,
+  );
 
   useEffect(() => {
     if (!sortieId) {
@@ -94,25 +94,25 @@ const LivraisonScanPage: React.FC = () => {
     if (isLoading) {
       return;
     }
-    const liste = (livraisons ?? []) as LivraisonInterface[];
-    const recevables = liste
-      .filter((l) => l.statutLivraison === "en_cours" && !l.reception)
-      .sort(
-        (a, b) =>
-          new Date(b.dateCreationLivraison).getTime() -
-          new Date(a.dateCreationLivraison).getTime(),
-      );
-    const cible = recevables[0];
+    if (data.anomalies.length > 0) {
+      navigate(`/employe/livraison/anomalies/${sortieId}`, { replace: true });
+      return;
+    }
+    const cible = [...data.recevables].sort(
+      (a, b) =>
+        new Date(b.dateCreationLivraison).getTime() -
+        new Date(a.dateCreationLivraison).getTime(),
+    )[0];
     if (!cible) {
       reinitialiser(
-        liste.length === 0
-          ? "Aucune livraison n'est associée à ce bon de sortie."
+        data.recevables.length === 0
+          ? "Aucune livraison de ce bon de sortie n'est à réceptionner."
           : "Aucune livraison de ce bon de sortie n'est à réceptionner.",
       );
       return;
     }
     navigate(`/employe/livraison/reception/${cible._id}`, { replace: true });
-  }, [sortieId, livraisons, isLoading, isError, navigate, reinitialiser]);
+  }, [sortieId, data, isLoading, isError, navigate, reinitialiser]);
 
   return (
     <div className='flex flex-col gap-5 pb-14'>
@@ -145,7 +145,7 @@ const LivraisonScanPage: React.FC = () => {
             />
             <p className='text-sm text-muted-foreground'>
               {sortieId
-                ? "Bon de sortie détecté, ouverture de la réception…"
+                ? "Bon de sortie détecté, traitement en cours…"
                 : "En attente d'un QR code…"}
             </p>
           </div>

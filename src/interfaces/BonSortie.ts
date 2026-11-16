@@ -7,13 +7,25 @@ export type LigneSortieStatutType =
   | "en_bon_sortie"
   | "en_livraison"
   | "livree"
-  | "non_recu";
+  | "non_recu"
+  | "regularise";
+
+export interface UtilisateurRef {
+  _id: string;
+  nom?: string;
+  prenom?: string;
+}
 
 export interface LigneSortieInterface {
   _id: string;
   quantiteLigneSortie: number;
   observation: string;
   statutLigneSortie: LigneSortieStatutType;
+  dateRegularisation?: string | null;
+  motifRegularisation?: string | null;
+  quantiteRegularisee?: number | null;
+  dateReceptionEffective?: string | null;
+  utilisateurRegularisation?: UtilisateurRef | null;
   ligneBonMagasin: LigneBonMagasinInterface | null;
 }
 

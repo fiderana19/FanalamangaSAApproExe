@@ -40,6 +40,11 @@ export const QUERY_INVALIDATION_GROUPS = {
     QueryCacheKey.APPROVISIONNEMENT,
     QueryCacheKey.BONS_SORTIE,
   ],
+  regularisation: [
+    QueryCacheKey.RECEPTION,
+    QueryCacheKey.LIVRAISON,
+    QueryCacheKey.BONS_SORTIE,
+  ],
   ressource: [QueryCacheKey.RESSOURCES],
   ressourceImpact: [
     QueryCacheKey.RESSOURCES,

@@ -18,6 +18,8 @@ const PAGE_TITLES: [string, string][] = [
   ["/approvisionnement/view", "Détail de l'approvisionnement"],
   ["/approvisionnement", "Approvisionnements"],
   ["/livraison/scan", "Scanner un bon de sortie"],
+  ["/livraison/anomalies", "Anomalies de livraison"],
+  ["/livraison/regularisation", "Régularisation de la livraison"],
   ["/livraison/reception", "Réception d'une livraison"],
   ["/livraison/view", "Détail de la livraison"],
   ["/livraison", "Livraisons"],
@@ -54,6 +56,8 @@ const EmployeLayout: React.FC = () => {
     p.includes("/import") ||
     p.includes("/bon-magasin/") ||
     p.includes("/reception") ||
+    p.includes("/anomalies") ||
+    p.includes("/regularisation") ||
     p.includes("/scan") ||
     p.includes("/mot-de-passe") ||
     p.includes("/controle") ||

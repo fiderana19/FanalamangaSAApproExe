@@ -41,6 +41,8 @@ const EmployeApprovisionnementViewPage = lazy(() => import("@/pages/Employe/Appr
 const EmployeLivraisonsPage = lazy(() => import("@/pages/Employe/LivraisonsPage"));
 const EmployeLivraisonViewPage = lazy(() => import("@/pages/Employe/LivraisonViewPage"));
 const EmployeReceptionCreatePage = lazy(() => import("@/pages/Employe/ReceptionCreatePage"));
+const EmployeLivraisonAnomaliesPage = lazy(() => import("@/pages/Employe/LivraisonAnomaliesPage"));
+const EmployeLivraisonRegularisationPage = lazy(() => import("@/pages/Employe/LivraisonRegularisationPage"));
 const EmployeLivraisonScanPage = lazy(() => import("@/pages/Employe/LivraisonScanPage"));
 const EmployeProfilePage = lazy(() => import("@/pages/Employe/ProfilePage"));
 const EmployeChangePasswordPage = lazy(() => import("@/pages/Employe/ChangePasswordPage"));
@@ -263,6 +265,14 @@ function App() {
             <Route path="livraison/reception/:id" element={
               <Suspense fallback={fallback}>
                 <EmployeReceptionCreatePage />
+              </Suspense>} />
+            <Route path="livraison/anomalies/:sortieId" element={
+              <Suspense fallback={fallback}>
+                <EmployeLivraisonAnomaliesPage />
+              </Suspense>} />
+            <Route path="livraison/regularisation/:sortieId/:receptionId" element={
+              <Suspense fallback={fallback}>
+                <EmployeLivraisonRegularisationPage />
               </Suspense>} />
             <Route path="livraison/scan" element={
               <Suspense fallback={fallback}>

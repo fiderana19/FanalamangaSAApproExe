@@ -144,7 +144,7 @@ const ReceptionPdf: React.FC<ReceptionPdfProps> = ({ livraison }) => {
   const lieu = service?.lieuService || "—";
 
   const lignes = (livraison.lignes ?? []).filter(
-    (ligne: LigneSortieInterface) => ligne.statutLigneSortie !== "non_recu",
+    (ligne: LigneSortieInterface) => ligne.statutLigneSortie === "livree",
   );
 
   const renderCell = (value: string, colIndex: number) => {
