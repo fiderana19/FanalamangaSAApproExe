@@ -53,11 +53,6 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
     "";
   const commentaireRegularisation =
     reception?.commentaireRegularisation ?? "";
-  const auteurRegularisation =
-    reception?.utilisateurRegularisation ??
-    lignesRegularisees.find((ligne) => ligne.utilisateurRegularisation)
-      ?.utilisateurRegularisation ??
-    null;
   const aRegularisation =
     !!dateRegularisation || lignesRegularisees.length > 0;
 
@@ -261,12 +256,6 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
                           {commentaireRegularisation}
                         </div>
                       )}
-                      <div>
-                        <span className='font-semibold'>Par : </span>
-                        {auteurRegularisation
-                          ? `${auteurRegularisation.nom ?? ""} ${auteurRegularisation.prenom ?? ""}`.trim()
-                          : "—"}
-                      </div>
                     </div>
                   </div>
                 )}
@@ -343,16 +332,13 @@ const LivraisonDetails: React.FC<LivraisonDetailsProps> = ({
                       </td>
                       <td className='px-4 py-3 whitespace-nowrap'>
                         <LigneSortieStatutBadge statut={ligne.statutLigneSortie} />
-                        {ligne.statutLigneSortie === "regularise" && (
-                          <div className='mt-1 text-[11px] text-muted-foreground'>
-                            {ligne.dateReceptionEffective
-                              ? `Reçue le ${formatDate(ligne.dateReceptionEffective)}`
-                              : "Régularisée"}
-                            {ligne.quantiteRegularisee !== null &&
-                              ligne.quantiteRegularisee !== undefined &&
-                              ` · Qté ${ligne.quantiteRegularisee}`}
-                          </div>
-                        )}
+                        {ligne.statutLigneSortie === "regularise" &&
+                          ligne.quantiteRegularisee !== null &&
+                          ligne.quantiteRegularisee !== undefined && (
+                            <div className='mt-1 text-[11px] text-muted-foreground'>
+                              Qté {ligne.quantiteRegularisee}
+                            </div>
+                          )}
                       </td>
                     </tr>
                   );
